@@ -1,0 +1,6 @@
+http://localhost:8080/authorize?user=user&password=
+Accept: application/json
+
+###
+http://localhost:8080/authorize?user=user&password=pass
+
