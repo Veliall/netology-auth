@@ -1,15 +1,10 @@
 package com.example.authservice.repository;
 
-import com.example.authservice.authorities.Authorities;
+import com.example.authservice.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Repository
-public class UserRepository {
+public interface UserRepository extends JpaRepository<UserEntity, String> {
 
-    public List<Authorities> getUserAuthorities(String user, String password) {
-        return new ArrayList<>();
-    }
 }

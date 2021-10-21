@@ -3,10 +3,13 @@ package com.example.authservice.service;
 import com.example.authservice.authorities.Authorities;
 import com.example.authservice.exceptions.InvalidCredentials;
 import com.example.authservice.exceptions.UnauthorizedUser;
+import com.example.authservice.exceptions.WrongUsernameOrPassword;
 import com.example.authservice.repository.UserRepository;
+import com.example.authservice.utils.AuthoritiesHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -14,15 +17,22 @@ import java.util.List;
 public class AuthorizationService {
     private final UserRepository userRepository;
 
-    public List<Authorities> getAuthorities(String user, String password) {
-        if (isEmpty(user) || isEmpty(password)) {
+    @Transactional
+    public List<Authorities> getAuthorities(String username, String password) {
+        if (isEmpty(username) || isEmpty(password)) {
             throw new InvalidCredentials("User name or password is empty");
         }
-        List<Authorities> userAuthorities = userRepository.getUserAuthorities(user, password);
-        if (isEmpty(userAuthorities)) {
-            throw new UnauthorizedUser("Unknown user " + user);
+
+        final var user = userRepository.findById(username).orElseThrow(WrongUsernameOrPassword::new);
+        if (!user.getPassword().equals(password)) {
+            throw new WrongUsernameOrPassword("Wrong username or password");
         }
-        return userAuthorities;
+
+        final var authorities = AuthoritiesHandler.handleAuthorities(user.getAuthorities());
+        if (isEmpty(authorities)) {
+            throw new UnauthorizedUser("Unknown user " + username);
+        }
+        return authorities;
     }
 
     private boolean isEmpty(String str) {

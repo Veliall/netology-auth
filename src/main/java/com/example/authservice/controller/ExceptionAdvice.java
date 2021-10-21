@@ -2,11 +2,14 @@ package com.example.authservice.controller;
 
 import com.example.authservice.exceptions.InvalidCredentials;
 import com.example.authservice.exceptions.UnauthorizedUser;
+import com.example.authservice.exceptions.WrongUsernameOrPassword;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
 @Log
@@ -20,5 +23,11 @@ public class ExceptionAdvice {
     public ResponseEntity<String> handleUnauthorizedUser(UnauthorizedUser e) {
         log.info(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UnauthorizedUser: " + e.getMessage());
+    }
+
+    @ExceptionHandler(WrongUsernameOrPassword.class)
+    public ResponseEntity<String> handleWrongUsernameOrPassword(WrongUsernameOrPassword e) {
+        log.info(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("WrongUsernameOrPassword: " + e.getMessage());
     }
 }
