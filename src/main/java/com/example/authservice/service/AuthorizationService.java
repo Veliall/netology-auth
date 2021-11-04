@@ -2,7 +2,6 @@ package com.example.authservice.service;
 
 import com.example.authservice.authorities.Authorities;
 import com.example.authservice.exceptions.InvalidCredentials;
-import com.example.authservice.exceptions.UnauthorizedUser;
 import com.example.authservice.exceptions.WrongUsernameOrPassword;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.utils.AuthoritiesHandler;
@@ -28,11 +27,7 @@ public class AuthorizationService {
             throw new WrongUsernameOrPassword("Wrong username or password");
         }
 
-        final var authorities = AuthoritiesHandler.handleAuthorities(user.getAuthorities());
-        if (isEmpty(authorities)) {
-            throw new UnauthorizedUser("Unknown user " + username);
-        }
-        return authorities;
+        return AuthoritiesHandler.handleAuthorities(user.getAuthorities());
     }
 
     private boolean isEmpty(String str) {

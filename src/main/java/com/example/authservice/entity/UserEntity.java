@@ -1,6 +1,5 @@
 package com.example.authservice.entity;
 
-import com.example.authservice.authorities.Authorities;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

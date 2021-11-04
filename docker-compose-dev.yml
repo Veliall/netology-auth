@@ -1,6 +1,7 @@
 version: '3.7'
 services:
   db:
+    container_name: db
     image: postgres:13-alpine3.14
     ports:
       - "5432:5432"
@@ -10,3 +11,12 @@ services:
       - POSTGRES_PASSWORD=pass
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+
+  app:
+    build: .
+    image: app
+    container_name: app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
